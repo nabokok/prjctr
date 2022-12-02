@@ -1,23 +1,43 @@
 const btn = document.querySelector('.switch-btn');
 const body = document.querySelector('body');
 const caption = document.querySelector('.last-date-caption');
-const COLOR_BLACK = 'black';
-const COLOR_WHITE = 'white';
 const ON = 'on';
 const OFF = 'off';
-
+let lastDateOn = localStorage.getItem('lastdateOn');
+let lastDateOff = localStorage.getItem('lastdateOff');
 
 if (localStorage.getItem('theme') === 'dark') {
     turnOff();
+} else {
+    turnOn();
 }
 
 btn.addEventListener('click', () => {
-    const lastDate = dateFormatter();
     if (localStorage.getItem('theme') !== 'dark') {
-        return turnOff(lastDate);
-    };
-    return turnOn(lastDate);
+        lastDateOff = dateFormatter();
+        localStorage.setItem('lastdateOff', lastDateOff)
+        turnOff();
+        return;
+    }
+        lastDateOn = dateFormatter();
+        localStorage.setItem('lastdateOn', lastDateOn)
+        turnOn();
+        return;
 });
+
+function turnOff() {
+    btn.innerHTML = `Turn ${ON}`;
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+    caption.innerHTML = lastDateOff ? `Last turn ${OFF}: ${lastDateOff}` : '';
+}
+
+function turnOn() {
+    btn.innerHTML = `Turn ${OFF}`;
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+    caption.innerHTML = lastDateOn ? `Last turn ${ON}: ${lastDateOn}` : '';
+}
 
 function dateFormatter() {
     const date = new Date();
@@ -27,33 +47,20 @@ function dateFormatter() {
     let dateHours = date.getHours();
     let dateMinutes = date.getMinutes();
     let dateSeconds = date.getSeconds();
-    const lastDate = localStorage.getItem('lastdate');
 
     if (dateMonths < 10) dateMonths = '0' + dateMonths;
     if (dateDate < 10) dateDate = '0' + dateDate;
     if (dateHours < 10) dateHours = '0' + dateHours;
     if (dateMinutes < 10) dateMinutes = '0' + dateMinutes;
     if (dateSeconds < 10) dateSeconds = '0' + dateSeconds;
-    
-    window.localStorage.setItem('lastdate', `${dateYears}-${dateMonths}-${dateDate} ${dateHours}:${dateMinutes}:${dateSeconds}`);
-    return lastDate;
-    
+
+return `${dateYears}-${dateMonths}-${dateDate} ${dateHours}:${dateMinutes}:${dateSeconds}`;
+    // if (localStorage.getItem('theme') !== 'dark') {
+    //     localStorage.setItem('lastdateOn', `${dateYears}-${dateMonths}-${dateDate} ${dateHours}:${dateMinutes}:${dateSeconds}`);
+    // } else {
+    //     localStorage.setItem('lastdateOff', `${dateYears}-${dateMonths}-${dateDate} ${dateHours}:${dateMinutes}:${dateSeconds}`);
+    // }
 }
 
-function turnOff(lastDate) {
-    body.style.backgroundColor = COLOR_BLACK;
-    btn.style = `background: ${COLOR_WHITE}; color: ${COLOR_BLACK}`;
-    caption.style.color = COLOR_WHITE;
-    btn.innerHTML = `Turn ${ON}`;
-    caption.innerHTML =  lastDate ? `Last turn ${ON}: ${lastDate}` : '';
-    window.localStorage.setItem('theme','dark');
-}
 
-function turnOn(lastDate) {
-    body.style.backgroundColor = COLOR_WHITE;
-    btn.style = `background: ${COLOR_BLACK}; color: ${COLOR_WHITE}`;
-    caption.style.color = COLOR_BLACK;
-    btn.innerHTML = `Turn ${OFF}`;
-    caption.innerHTML = lastDate ? `Last turn ${OFF}: ${lastDate}` : '';
-    window.localStorage.setItem('theme','light');
-}
+

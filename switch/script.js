@@ -55,11 +55,6 @@ function dateFormatter() {
     if (dateSeconds < 10) dateSeconds = '0' + dateSeconds;
 
 return `${dateYears}-${dateMonths}-${dateDate} ${dateHours}:${dateMinutes}:${dateSeconds}`;
-    // if (localStorage.getItem('theme') !== 'dark') {
-    //     localStorage.setItem('lastdateOn', `${dateYears}-${dateMonths}-${dateDate} ${dateHours}:${dateMinutes}:${dateSeconds}`);
-    // } else {
-    //     localStorage.setItem('lastdateOff', `${dateYears}-${dateMonths}-${dateDate} ${dateHours}:${dateMinutes}:${dateSeconds}`);
-    // }
 }
 
 
